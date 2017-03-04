@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"sort"
 
-	"github.com/adams-sarah/test2doc/doc"
+	"github.com/Emyrk/test2doc/doc"
 	"github.com/adams-sarah/test2doc/doc/parse"
 )
 
