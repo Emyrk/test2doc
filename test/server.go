@@ -73,7 +73,7 @@ func handleAndRecord(handler http.Handler, outDoc *doc.Doc) http.HandlerFunc {
 		handler.ServeHTTP(resp, req)
 
 		// setup resource
-		u := doc.NewURL(req)
+		u := doc.NewJSONRPCUrl(req, docReq.Body.Content)
 		path := u.ParameterizedPath
 
 		if resources[path] == nil {

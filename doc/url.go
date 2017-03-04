@@ -1,6 +1,8 @@
 package doc
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
@@ -12,6 +14,18 @@ type URL struct {
 	rawURL            *url.URL
 	ParameterizedPath string
 	Parameters        []Parameter
+}
+
+func NewJSONRPCUrl(req *http.Request, body []byte) *URL {
+	j := new(JSONRPCRequest)
+	err := json.Unmarshal(body, j)
+	if err != nil {
+		return NewURL(req)
+	}
+
+	u := NewURL(req)
+	u.ParameterizedPath = fmt.Sprintf("%s -- (%s)", u.ParameterizedPath, j.Method)
+	return u
 }
 
 func NewURL(req *http.Request) *URL {
