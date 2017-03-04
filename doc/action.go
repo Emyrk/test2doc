@@ -1,6 +1,7 @@
 package doc
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 	"text/template"
@@ -47,6 +48,28 @@ func (a *Action) Render() string {
 	a.Requests = sortedReqs
 
 	return render(actionTmpl, a)
+}
+
+// Helper for jsonrpc calls
+type JSONRPCRequest struct {
+	JsonRpc string          `json:"jsonrpc"`
+	ID      uint32          `json:"id"`
+	Method  string          `json:"method"`
+	Params  json.RawMessage `json:"params"`
+}
+
+func NewJSONRPCAction(httpMethod string, body []byte) (*Action, error) {
+	j := new(JSONRPCRequest)
+	err := json.Unmarshal(body, j)
+	if err != nil {
+		return nil, err
+	}
+	return &Action{
+		Title:       j.Method,
+		Description: "",
+		Method:      HTTPMethod(httpMethod),
+		Requests:    []*Request{},
+	}, nil
 }
 
 func NewAction(method, handlerName string) (*Action, error) {

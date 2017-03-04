@@ -87,7 +87,8 @@ func handleAndRecord(handler http.Handler, outDoc *doc.Doc) http.HandlerFunc {
 		action := resources[path].FindAction(req.Method)
 		if action == nil {
 			// make new action
-			action, err = doc.NewAction(req.Method, resp.HandlerInfo.FuncName)
+			// action, err = doc.NewAction(req.Method, "Another")
+			action, err = doc.NewJSONRPCAction(req.Method, docReq.Body.Content)
 			if err != nil {
 				log.Println("Error:", err.Error())
 				return
